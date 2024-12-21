@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{layouts/navbar :: bootstrap}">
+    <meta charset="UTF-8">
+    <title>Update user</title>
+</head>
+<body>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5 mb-md-5">
+
+
+       <div th:replace="~{layouts/navbar :: navbar}"></div>
+
+
+
+
+
+        <h2 class="m-4 text-center">Edit Registration Form</h2>
+
+
+    <!-- Registration Form -->
+    <form th:action="@{/users/update/{id}(id=${user.id})}" method="post" class="px-4" th:object="${user}">
+        <input type="hidden" th:field="*{id}">
+        <!-- First Name -->
+        <div class="mb-3 row">
+            <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
+            <div class="col-sm-6">
+                <input type="text" id="firstName" class="form-control" required th:field="*{firstName}">
+            </div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-3 row">
+            <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+            <div class="col-sm-6">
+                <input type="text" id="lastName" class="form-control" required th:field="*{lastName}">
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3 row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-6">
+                <input type="email" id="email" class="form-control" required th:field="*{email}">
+            </div>
+        </div>
+
+
+        <!-- Submit Button -->
+        <div >
+            <button type="submit" class="btn btn-success">Update</button>
+<!--            <span >-->
+
+<!--        <a href="/" th:href="@{/users}">Back.</a>-->
+<!--      </span>-->
+        </div>
+    </form>
+</div>
+</body>
+</html>
