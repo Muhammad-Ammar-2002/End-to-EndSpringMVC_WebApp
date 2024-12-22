@@ -1,14 +1,18 @@
     package org.example.endtoendspringmvc_webapplication.Services;
 
+    import lombok.Data;
     import lombok.RequiredArgsConstructor;
     import org.example.endtoendspringmvc_webapplication.Entities.PasswordResetToken;
+    import org.example.endtoendspringmvc_webapplication.Entities.TokenExpirationTime;
     import org.example.endtoendspringmvc_webapplication.Entities.UserEntity;
+    import org.example.endtoendspringmvc_webapplication.Exceptions.PasswordResetTokenException;
     import org.example.endtoendspringmvc_webapplication.Repo.PasswordResetTokenRepo;
     import org.example.endtoendspringmvc_webapplication.Repo.UserRepoInt;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
 
     import java.util.Calendar;
+    import java.util.Date;
     import java.util.Optional;
 
     @Service
@@ -36,24 +40,31 @@
 
         @Override
         public void createPasswordResetTokenForUser(UserEntity user, String passwordResetToken) {
+            Optional<PasswordResetToken> existingTokenOpt = passwordRestTokenRepo.findById(user.getId());
 
+            if (existingTokenOpt.isPresent()) {
+                PasswordResetToken existingToken = existingTokenOpt.get();
+                Date expirationTime = existingToken.getExpirationTime();
 
-            // Create and save the new token
-            PasswordResetToken resetToken = new PasswordResetToken(passwordResetToken, user);
-
-            if (passwordRestTokenRepo.existsById(user.getId())) {
-                throw new RuntimeException("A password reset token already exists for this user.");
+                // Check if the token is expired
+                if (expirationTime.before(new Date())) {
+                    // Update the existing token with a new token and expiration time
+                    existingToken.setToken(passwordResetToken);
+                    existingToken.setExpirationTime(TokenExpirationTime.getExpirationTime());
+                    passwordRestTokenRepo.save(existingToken);
+                    return; // Exit after updating the existing token
+                } else {
+                    // Throw an exception if a valid token is still in progress
+                    throw new PasswordResetTokenException(
+                            "A password reset request is already in progress. " +
+                                    "Please check your email for the reset link or try again later."
+                    );
+                }
+            } else {
+                // Save a new token if no existing valid token is found
+                passwordRestTokenRepo.save(new PasswordResetToken(passwordResetToken, user));
             }
-
-
-            passwordRestTokenRepo.save(resetToken);
         }
-
-
-
-
-
-
         @Override
         public Optional<UserEntity> findUserByPasswordResetToken(String token) {
             return Optional.ofNullable(passwordRestTokenRepo.findByToken(token).get().getUser());
