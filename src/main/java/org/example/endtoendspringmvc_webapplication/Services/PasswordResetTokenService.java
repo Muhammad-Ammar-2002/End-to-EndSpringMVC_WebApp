@@ -1,7 +1,9 @@
-    package org.example.endtoendspringmvc_webapplication.Config.Password;
+    package org.example.endtoendspringmvc_webapplication.Services;
 
     import lombok.RequiredArgsConstructor;
+    import org.example.endtoendspringmvc_webapplication.Entities.PasswordResetToken;
     import org.example.endtoendspringmvc_webapplication.Entities.UserEntity;
+    import org.example.endtoendspringmvc_webapplication.Repo.PasswordResetTokenRepo;
     import org.example.endtoendspringmvc_webapplication.Repo.UserRepoInt;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
@@ -11,9 +13,9 @@
 
     @Service
     @RequiredArgsConstructor
-    public class PasswordRestTokenService implements PasswordRestTokenServiceInt{
+    public class PasswordResetTokenService implements PasswordResetTokenServiceInt {
 
-        private final PasswordRestTokenRepo passwordRestTokenRepo;
+        private final PasswordResetTokenRepo passwordRestTokenRepo;
         private final UserRepoInt userRepoInt;
         private final PasswordEncoder passwordEncoder;
         @Override
@@ -35,11 +37,22 @@
         @Override
         public void createPasswordResetTokenForUser(UserEntity user, String passwordResetToken) {
 
-            PasswordResetToken resetToken=new PasswordResetToken(passwordResetToken,user);
 
-             passwordRestTokenRepo.save(resetToken);
+            // Create and save the new token
+            PasswordResetToken resetToken = new PasswordResetToken(passwordResetToken, user);
 
+            if (passwordRestTokenRepo.existsById(user.getId())) {
+                throw new RuntimeException("A password reset token already exists for this user.");
+            }
+
+
+            passwordRestTokenRepo.save(resetToken);
         }
+
+
+
+
+
 
         @Override
         public Optional<UserEntity> findUserByPasswordResetToken(String token) {
@@ -52,5 +65,10 @@
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepoInt.save(user);
 
+        }
+
+        @Override
+        public void deleteUserToken(Long id) {
+            passwordRestTokenRepo.deleteById(id);
         }
     }

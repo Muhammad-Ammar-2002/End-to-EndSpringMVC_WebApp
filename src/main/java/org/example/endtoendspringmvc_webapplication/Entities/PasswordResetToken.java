@@ -1,11 +1,9 @@
-package org.example.endtoendspringmvc_webapplication.Config.Password;
+package org.example.endtoendspringmvc_webapplication.Entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.endtoendspringmvc_webapplication.Config.Token.TokenExpirationTime;
-import org.example.endtoendspringmvc_webapplication.Entities.UserEntity;
 
 import java.util.Date;
 
@@ -20,7 +18,7 @@ public class PasswordResetToken {
     private Long id;
     private String token;
     private Date expirationTime;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id",unique = true,nullable = false)
     private UserEntity user;
 

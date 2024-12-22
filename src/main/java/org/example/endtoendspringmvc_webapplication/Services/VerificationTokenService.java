@@ -1,6 +1,9 @@
-package org.example.endtoendspringmvc_webapplication.Config.Token;
+package org.example.endtoendspringmvc_webapplication.Services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.endtoendspringmvc_webapplication.Entities.VerificationToken;
+import org.example.endtoendspringmvc_webapplication.Repo.VerificationTokenRepoInt;
 import org.example.endtoendspringmvc_webapplication.Entities.UserEntity;
 import org.example.endtoendspringmvc_webapplication.Repo.UserRepoInt;
 import org.springframework.stereotype.Service;
@@ -47,8 +50,9 @@ public class VerificationTokenService implements VerificationTokenServiceInt{
         return verificationTokenRepo.findByToken(token);
     }
 
-    @Override
-    public void deleteUserToken(String email) {
-        verificationTokenRepo.deleteByUserEmail(email);
+    @Transactional
+
+    public void deleteUserToken(Long id) {
+        verificationTokenRepo.deleteById(id);
     }
 }

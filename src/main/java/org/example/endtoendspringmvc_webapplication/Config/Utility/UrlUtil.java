@@ -1,4 +1,4 @@
-package org.example.endtoendspringmvc_webapplication.Utility;
+package org.example.endtoendspringmvc_webapplication.Config.Utility;
 
 import jakarta.servlet.http.HttpServletRequest;
 

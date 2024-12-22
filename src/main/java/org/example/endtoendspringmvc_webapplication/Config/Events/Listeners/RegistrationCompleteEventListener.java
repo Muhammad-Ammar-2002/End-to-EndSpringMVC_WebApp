@@ -1,11 +1,11 @@
-package org.example.endtoendspringmvc_webapplication.Event.Listener;
+package org.example.endtoendspringmvc_webapplication.Config.Events.Listeners;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.example.endtoendspringmvc_webapplication.Config.Token.VerificationTokenServiceInt;
+import org.example.endtoendspringmvc_webapplication.Services.VerificationTokenServiceInt;
 import org.example.endtoendspringmvc_webapplication.Entities.UserEntity;
-import org.example.endtoendspringmvc_webapplication.Event.RegistrationCompleteEvent;
+import org.example.endtoendspringmvc_webapplication.Config.Events.RegistrationCompleteEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -54,14 +54,14 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
                 "<p>Thank you<br>End To End Project Team";
         emailMessage(subject,senderName,mailContent,mailSender,user);
     }
-    public void sendPasswordRestVerificationEmail(String url) throws MessagingException, UnsupportedEncodingException {
+    public void sendPasswordRestVerificationEmail(String url,UserEntity user) throws MessagingException, UnsupportedEncodingException {
         String subject="Password Rest Request verification";
         String senderName="End To End Project Team";
-        String mailContent="<p>Hi, "+user.getFirstName()+"</p>"+
-                "<p><b>You recently requested to rest your password,</b>"+""+
-                "please, follow the link bellow to complete the process.</p>"+
-                "<a href=\""+url+"\">Reset your password</a>"+
-                "<p>Thank you<br>End To End Project Team";
+        String mailContent = "<p>Hi, " + user.getFirstName() + "</p>" +
+                "<p><b>You recently requested to reset your password.</b></p>" +
+                "<p>Please, follow the link below to complete the process:</p>" +
+                "<a href=\"" + url + "\">Reset your password</a>" +
+                "<p>Thank you,<br>End-To-End Project Team</p>";
         emailMessage(subject,senderName,mailContent,mailSender,user);
     }
 

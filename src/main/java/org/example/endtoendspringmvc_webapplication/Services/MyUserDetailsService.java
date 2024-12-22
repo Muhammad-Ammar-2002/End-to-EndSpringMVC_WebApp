@@ -1,6 +1,7 @@
-package org.example.endtoendspringmvc_webapplication.Config;
+package org.example.endtoendspringmvc_webapplication.Services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.endtoendspringmvc_webapplication.Models.MyUserDetails;
 import org.example.endtoendspringmvc_webapplication.Repo.UserRepoInt;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

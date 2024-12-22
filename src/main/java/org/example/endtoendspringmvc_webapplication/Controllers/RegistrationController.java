@@ -3,23 +3,21 @@
     import jakarta.mail.MessagingException;
     import jakarta.servlet.http.HttpServletRequest;
     import lombok.RequiredArgsConstructor;
-    import org.example.endtoendspringmvc_webapplication.Config.Password.PasswordRestTokenServiceInt;
-    import org.example.endtoendspringmvc_webapplication.Config.Token.VerificationToken;
-    import org.example.endtoendspringmvc_webapplication.Config.Token.VerificationTokenRepoInt;
-    import org.example.endtoendspringmvc_webapplication.Config.Token.VerificationTokenServiceInt;
+    import org.example.endtoendspringmvc_webapplication.Services.PasswordResetTokenServiceInt;
+    import org.example.endtoendspringmvc_webapplication.Entities.VerificationToken;
+    import org.example.endtoendspringmvc_webapplication.Services.VerificationTokenServiceInt;
     import org.example.endtoendspringmvc_webapplication.Entities.UserEntity;
-    import org.example.endtoendspringmvc_webapplication.Event.Listener.RegistrationCompleteEventListener;
-    import org.example.endtoendspringmvc_webapplication.Event.RegistrationCompleteEvent;
+    import org.example.endtoendspringmvc_webapplication.Config.Events.Listeners.RegistrationCompleteEventListener;
+    import org.example.endtoendspringmvc_webapplication.Config.Events.RegistrationCompleteEvent;
     import org.example.endtoendspringmvc_webapplication.Models.RegistrationRequest;
     import org.example.endtoendspringmvc_webapplication.Services.UserServiceInt;
-    import org.example.endtoendspringmvc_webapplication.Utility.UrlUtil;
+    import org.example.endtoendspringmvc_webapplication.Config.Utility.UrlUtil;
     import org.springframework.context.ApplicationEventPublisher;
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.*;
 
     import java.io.UnsupportedEncodingException;
-    import java.net.http.HttpRequest;
     import java.util.Optional;
     import java.util.UUID;
 
@@ -31,12 +29,13 @@
         private final UserServiceInt userService;
         private final ApplicationEventPublisher publisher;
         private final VerificationTokenServiceInt verificationTokenService;
-        private final PasswordRestTokenServiceInt passwordRestTokenService;
+        private final PasswordResetTokenServiceInt passwordRestTokenService;
         private final RegistrationCompleteEventListener eventListener;
 
         @GetMapping("registration-form")
         public String showRegistrationForm(Model model)
         {
+
             model.addAttribute("user",new RegistrationRequest());
             return "registration";
         }
@@ -98,7 +97,7 @@
 
                 String url=UrlUtil.getAppUrl(request)+"/registration/password-reset-form?token="+passwordResetToken;
             try {
-                eventListener.sendPasswordRestVerificationEmail(url);
+                eventListener.sendPasswordRestVerificationEmail(url,user);
             } catch (MessagingException |UnsupportedEncodingException  e) {
                 model.addAttribute("error",e.getMessage());
             }

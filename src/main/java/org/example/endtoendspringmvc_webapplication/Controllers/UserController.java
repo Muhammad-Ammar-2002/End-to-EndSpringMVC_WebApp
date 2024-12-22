@@ -40,9 +40,9 @@ public class UserController {
 
 
     @GetMapping ("delete_user")
-    public String deleteUserByEmail(@RequestParam("email") String userEmail)
+    public String deleteUserByEmail(@RequestParam("id") Long id)
     {
-        userService.deleteUser(userEmail);
+        userService.deleteUser(id);
         return "redirect:/users?success_deleted";
     }
 }

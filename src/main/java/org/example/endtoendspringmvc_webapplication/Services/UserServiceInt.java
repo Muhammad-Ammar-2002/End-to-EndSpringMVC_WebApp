@@ -11,7 +11,7 @@ public interface UserServiceInt {
      List<UserEntity> getAllUsers();
      UserEntity registerUser(RegistrationRequest user);
      UserEntity findUserByEmail(String email);
-    void deleteUser(String userEmail);
+    void deleteUser(Long id);
 
     Optional<UserEntity> findUserById(Long id);
 

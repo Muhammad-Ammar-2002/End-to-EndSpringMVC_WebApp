@@ -40,7 +40,7 @@
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
                     <td ><a href="#" th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a></td>
-                    <td ><a href="#" th:href="@{/users/delete_user?(email=${user.email})}">Delete</a></td>
+                    <td ><a href="#" th:href="@{/users/delete_user?(id=${user.id})}">Delete</a></td>
                 </tr>
                 </tbody>
 

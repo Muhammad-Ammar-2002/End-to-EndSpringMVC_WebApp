@@ -1,4 +1,4 @@
-package org.example.endtoendspringmvc_webapplication.Event;
+package org.example.endtoendspringmvc_webapplication.Config.Events;
 
 import lombok.Getter;
 import lombok.Setter;

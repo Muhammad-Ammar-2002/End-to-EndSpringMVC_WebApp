@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,9 +55,13 @@
     <!-- Submit Button -->
     <div >
       <button type="submit" class="btn btn-success">Register</button>
-      <span >
+      <span sec:authorize="!isAuthenticated()">
         Already registered?
         <a href="/" th:href="@{/authenticate/login-form}">Login here.</a>
+      </span>
+      <span sec:authorize="isAuthenticated()">
+
+        <a href="/" th:href="@{/users}">Back to users.</a>
       </span>
     </div>
   </form>

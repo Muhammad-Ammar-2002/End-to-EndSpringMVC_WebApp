@@ -1,4 +1,4 @@
-package org.example.endtoendspringmvc_webapplication.Config;
+package org.example.endtoendspringmvc_webapplication.Models;
 
 
 import lombok.Data;
